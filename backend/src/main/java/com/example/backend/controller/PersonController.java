@@ -28,6 +28,7 @@ public class PersonController {
     }
 
 
+    @PostMapping
     public ResponseEntity<Object> postPerson(@RequestBody NewPerson newPerson){
         if (!newPerson.firstName().isEmpty() && !newPerson.lastName().isEmpty()&& !newPerson.addressPLZ().isEmpty()&& !newPerson.addressCity().isEmpty()&& !newPerson.addressStreet().isEmpty()&& !newPerson.addressHouseNumber().isEmpty()){
             Person savePerson = new Person(UUID.randomUUID().toString(), newPerson.firstName(),newPerson.lastName(), newPerson.addressPLZ(), newPerson.addressCity(), newPerson.addressStreet(), newPerson.addressHouseNumber());
