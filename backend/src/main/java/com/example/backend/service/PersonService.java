@@ -1,11 +1,14 @@
 package com.example.backend.service;
 
 
+import com.example.backend.model.Address;
+import com.example.backend.model.NewPerson;
 import com.example.backend.model.Person;
 import com.example.backend.repository.PersonRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PersonService {
@@ -18,7 +21,9 @@ public class PersonService {
         return personRepo.findAll();
     }
 
-    public Person save(Person savePerson){
+    public Person save(NewPerson newPerson){
+        Address saveAddress = new Address(newPerson.addressPLZ(), newPerson.addressCity(), newPerson.addressStreet(), newPerson.addressHouseNumber());
+        Person savePerson = new Person(UUID.randomUUID().toString(), newPerson.firstName(), newPerson.lastName(), saveAddress);
         return personRepo.save(savePerson);
     }
 
