@@ -18,7 +18,7 @@ export default function App(){
             .then(response => {setPersons(response.data)
             })
             .catch(() => {
-                alert('Fehler: Gib alle erforderlichen Daten ein.')
+                alert('Fehler')
             })
     }
     function deletePerson (id: string){
