@@ -26,7 +26,7 @@ public class PersonService {
     }
 
     public Person save(NewPerson newPerson){
-        Address saveAddress = new Address(newPerson.addressPLZ(), newPerson.addressCity(), newPerson.addressStreet(), newPerson.addressHouseNumber());
+        Address saveAddress = new Address(newPerson.address().addressPLZ(), newPerson.address().addressCity(), newPerson.address().addressStreet(), newPerson.address().addressHouseNumber());
         Person savePerson = new Person(UUID.randomUUID().toString(), newPerson.firstName(), newPerson.lastName(), saveAddress);
         return personRepo.save(savePerson);
     }

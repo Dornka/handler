@@ -3,6 +3,7 @@ import {Person} from "./model/Person.tsx";
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import PersonGallery from "./components/PersonGallery.tsx";
+import AddPerson from "./components/AddPerson.tsx";
 
 export default function App(){
 
@@ -31,6 +32,7 @@ export default function App(){
         <>
             <Routes>
                 <Route path="/" element={<PersonGallery persons={persons} onDelete={deletePerson}/>}/>
+                <Route path="/persons/add" element={<AddPerson uri={uri} getAll={getAll}/>}/>
                 <Route path="/*" element={<PersonGallery persons={persons} onDelete={deletePerson}/>}/>
             </Routes>
         </>
