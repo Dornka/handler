@@ -5,11 +5,11 @@ import com.example.backend.model.Address;
 import com.example.backend.model.NewPerson;
 import com.example.backend.model.Person;
 import com.example.backend.service.PersonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -28,7 +28,19 @@ public class PersonController {
         return personService.getAll();
     }
 
+    @GetMapping("/{id}")
+    public Person getPerson(@PathVariable String id){return personService.getPerson(id);}
+
+    @PutMapping("{id}")
+    public Person updatePerson(@PathVariable String id, @RequestBody Person person){
+        if (!id.equals(person.id())){
+            throw new IllegalArgumentException("Person ID not found or not matched");
+        }
+        return personService.updatePerson(person);
+    }
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> postPerson(@RequestBody NewPerson newPerson){
         if (!newPerson.firstName().isEmpty() && !newPerson.lastName().isEmpty()){
             Person result = personService.save(newPerson);

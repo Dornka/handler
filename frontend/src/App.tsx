@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {Person} from "./model/Person.tsx";
 import axios from "axios";
+import {Route, Routes} from "react-router-dom";
+import PersonGallery from "./components/PersonGallery.tsx";
 
 export default function App(){
 
@@ -18,20 +20,19 @@ export default function App(){
                 alert('Fehler: Gib alle erforderlichen Daten ein.')
             })
     }
+    function deletePerson (id: string){
+        axios.delete("/api/persons/" + id)
+            .then(() =>{
+                setPersons(persons?.filter((persons) => persons.id !==id))
+            })
+    }
 
     return (
         <>
-            {persons && persons.map((person) => (
-                <div key={person.id}>
-                    <p>Name: {person.firstName}</p>
-                    <p>Age: {person.lastName}</p>
-                    <p>Age: {person.address.addressCity}</p>
-                    <p>Age: {person.address.addressPLZ}</p>
-                    <p>Age: {person.address.addressStreet}</p>
-                    <p>Age: {person.address.addressHouseNumber}</p>
-                    {/* Add more properties as needed */}
-                </div>
-            ))}
+            <Routes>
+                <Route path="/" element={<PersonGallery persons={persons} onDelete={deletePerson}/>}/>
+                <Route path="/*" element={<PersonGallery persons={persons} onDelete={deletePerson}/>}/>
+            </Routes>
         </>
-    );
+    )
 }
