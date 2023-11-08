@@ -3,22 +3,21 @@ package com.example.backend.controller;
 import com.example.backend.model.Address;
 import com.example.backend.model.Person;
 import com.example.backend.repository.PersonRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -279,4 +278,24 @@ class PersonControllerTest {
                 assertThat(actualPerson.id())
                         .isNotBlank();
     }
+    @Test
+    @DirtiesContext
+    void testUpdatePersonWithMismatchedIds() throws JsonProcessingException {
+        // GIVEN
+        String idInPath = "1";
+        Person person = new Person("2", "firstName", "lastName", new Address("12345", "CityName", "StreetName", "42"));
+        String requestContent = objectMapper.writeValueAsString(person);
+
+        // WHEN and THEN
+        Exception actualException = assertThrows(ServletException.class, () -> {
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/persons/" + idInPath)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestContent));
+        });
+
+        // Unwrap and check the actual cause
+        Throwable rootCause = actualException.getCause();
+        assertThat(rootCause).isInstanceOf(IllegalArgumentException.class);
+    }
 }
+
