@@ -17,10 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -67,7 +68,7 @@ class PersonControllerTest {
     @Test
     void postPerson() throws Exception {
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/persons")
+        mockMvc.perform(post("/api/persons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                 {
@@ -119,7 +120,7 @@ class PersonControllerTest {
     @DirtiesContext
     void findPersonById() throws Exception {
         //GIVEN
-        String testBody = mockMvc.perform(MockMvcRequestBuilders.post("/api/persons")
+        String testBody = mockMvc.perform(post("/api/persons")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                 {
@@ -208,4 +209,74 @@ class PersonControllerTest {
         """));
     }
 
+    @DirtiesContext
+    @Test
+    void PostPersonWithInvalidData() throws Exception{
+        //GIVEN
+        Address address = new Address("12345", "CityName", "StreetName", "42");
+        Person person = new Person("1", "firstName", "lastName", address);
+        personRepo.save(person);
+        //WHEN
+        mockMvc.perform(post("/api/persons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+{
+                    "firstName": "",
+                    "lastName": "",
+                    "address": {
+                        "addressPLZ": "",
+                        "addressCity": "",
+                        "addressStreet": "",
+                        "addressHouseNumber": ""
+                    }
+                }
+"""))
+                //THEN
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Bitte alles ausfüllen."));
+    }
+
+    @DirtiesContext
+    @Test
+    void expectSuccessfulPost() throws Exception{
+        //WHEN
+        String actual = mockMvc.perform(
+                post("/api/persons")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""  
+                {
+                    "firstName": "firstName2222",
+                    "lastName": "lastName",
+                    "address": {
+                        "addressPLZ": "12345",
+                        "addressCity": "CityName",
+                        "addressStreet": "StreetName",
+                        "addressHouseNumber": "42"
+                    }
+                }"""
+                        )
+        )
+                //THEN
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(
+                        """
+                    {
+                    "firstName": "firstName2222",
+                    "lastName": "lastName",
+                    "address": {
+                        "addressPLZ": "12345",
+                        "addressCity": "CityName",
+                        "addressStreet": "StreetName",
+                        "addressHouseNumber": "42"
+                    }
+                }"""
+                ))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+                Person actualPerson = objectMapper.readValue(actual, Person.class);
+                assertThat(actualPerson.id())
+                        .isNotBlank();
+    }
 }
