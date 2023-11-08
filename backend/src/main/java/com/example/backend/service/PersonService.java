@@ -34,6 +34,14 @@ public class PersonService {
     public void delete(String id) { personRepo.deleteById(id);}
 
     public Person updatePerson(Person person){
-        return personRepo.save(person);
+
+        Person updatedPerson = new Person(
+                person.id(),
+                person.firstName(),
+                person.lastName(),
+                person.address()
+        );
+
+        return personRepo.save(updatedPerson);
     }
 }
