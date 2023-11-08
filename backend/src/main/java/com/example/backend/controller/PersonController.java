@@ -2,7 +2,6 @@ package com.example.backend.controller;
 
 
 import com.example.backend.dto.PersonDTO;
-import com.example.backend.model.Address;
 import com.example.backend.model.NewPerson;
 import com.example.backend.model.Person;
 import com.example.backend.service.PersonService;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/persons")
