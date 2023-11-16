@@ -3,7 +3,7 @@ export default function Header (){
     return (
 
         <h1>
-            Persons (NamePlaceholder)
+            EasyContacts
         </h1>
 
         )

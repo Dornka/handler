@@ -23,14 +23,6 @@ h1{
   width: 20em;
   padding: 0.5em;
 }
-article{
-  border: 0.15em solid lime;
-  background-color: darkolivegreen;
-  color: wheat;
-  padding: 1em;
-  margin: 1em;
-  max-width: 20em;
-}
 .div_personGallery{
   display: flex;
   flex-direction: column;
@@ -39,6 +31,8 @@ article{
 form{
   display: flex;
   flex-direction: column;
+  border: 0.15em solid lime;
+  background-color: darkolivegreen;
 }
 label{
   margin: 0.5em;
@@ -65,4 +59,50 @@ a{
   padding: 0.4em;
   border: 0.15em solid darkgreen;
   border-radius: 1em;
+}
+table {
+  border-collapse: collapse;
+  width: 80%;
+  background-color: #f7f7f7;
+  table-layout: fixed;
+  margin: 0 auto;
+}
+th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  width: 20%;
+}
+th {
+  background-color: #f2f2f2;
+}
+.delete-button {
+  color: #ff6666; /* Rote Textfarbe */
+  border: none;
+  background: none; /* Entfernt die Hintergrundfarbe */
+  padding: 0;
+  cursor: pointer;
+  font-size: 14px;
+  outline: none; /* Entfernt die Outline */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Zentriert den Inhalt horizontal und vertikal */
+  width: 90%;
+}
+
+.add-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.add-button:hover {
+  background-color: #45a049;
 }

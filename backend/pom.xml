@@ -47,7 +47,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>recipe</finalName>
+        <finalName>handler</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

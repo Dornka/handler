@@ -13,8 +13,8 @@ export default function PersonGallery(props: PersonGalleryProps)       {
 
         <div className="div_personGallery">
             <Header/>
-            <Link to={"persons/add"}>
-                AddNewPerson
+            <Link to={"persons/add"} className="add-button">
+                Add New Person
             </Link>
             {props.persons?.map((person) => (
                 <div key={person.id}>
